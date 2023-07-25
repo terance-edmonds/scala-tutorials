@@ -4,11 +4,39 @@ def toChar (i: Int) = i.toChar;
 /* convert character to integer */
 def toInt (c: Char) = c.toInt;
 
+def shiftChar (c: Char, shifts: Int): Char = {
+    if(shifts == 0) {
+        return toChar(c)
+    }
+    else if(shifts > 0) {
+        if(c.isUpper && toInt(c) + 1 > 90) {
+            return shiftChar(toChar(65), shifts - 1)
+        }
+        else if(c.isLower && toInt(c) + 1 > 122) {
+            return shiftChar(toChar(97), shifts - 1)
+        }
+        else {
+            return shiftChar(toChar(toInt(c) + 1), shifts - 1)
+        }
+    }
+    else {
+        if(c.isUpper && toInt(c) - 1 < 65) {
+            return shiftChar(toChar(90), shifts + 1)
+        } 
+        else if(c.isLower && toInt(c) - 1 < 97) {
+            return shiftChar(toChar(122), shifts + 1)
+        } 
+        else {
+            return shiftChar(toChar(toInt(c) - 1), shifts + 1)
+        }
+    }
+}
+
 /* encrypt with shifting */
-def encrypt (str: String, key: Int): String = str.map(c => toChar(toInt(c) + key))
+def encrypt (str: String, key: Int): String = str.map(c => if(c.isLetter) shiftChar(c, key) else c)
 
 /* decrypt with shifting */
-def decrypt (str: String, key: Int): String = str.map(c => toChar(toInt(c) - key))
+def decrypt (str: String, key: Int): String = str.map(c => if(c.isLetter) shiftChar(c, -key) else c )
 
 @main def init () = {
     println("===== Ceasar Cipher =====");
